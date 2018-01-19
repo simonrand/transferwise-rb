@@ -1,4 +1,4 @@
-module TransferWise
+module Transferwise
   class OAuth
     attr_accessor :access_token
 
@@ -11,7 +11,7 @@ module TransferWise
       @client ||= ::OAuth2::Client.new(
         @client_id,
         @client_secret,
-        { site: TransferWise.api_base,
+        { site: Transferwise.api_base,
           auth_scheme: :basic_auth
         }
       )

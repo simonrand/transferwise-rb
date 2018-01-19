@@ -1,4 +1,4 @@
-module TransferWise
+module Transferwise
   module Util
 
     def self.indifferent_access(object)

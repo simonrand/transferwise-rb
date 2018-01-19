@@ -1,6 +1,6 @@
-module TransferWise
+module Transferwise
   class APIResource
-    include TransferWise::TransferWiseObject
+    include Transferwise::TransferwiseObject
 
     API_VERSION = 'v1'.freeze
 
@@ -20,18 +20,18 @@ module TransferWise
     end
 
     def self.create(params = {}, opts = {})
-      response = TransferWise::Request.request(:post, collection_url, params, opts)
-      convert_to_transfer_wise_object(response)
+      response = Transferwise::Request.request(:post, collection_url, params, opts)
+      convert_to_transferwise_object(response)
     end
 
-    def self.list(filters = {}, headers = {}, resource_id: nil)
-      response = TransferWise::Request.request(:get, collection_url(resource_id), filters, headers)
-      convert_to_transfer_wise_object(response)
+    def self.list(filters = {}, headers = {}, resource_id = nil)
+      response = Transferwise::Request.request(:get, collection_url(resource_id), filters, headers)
+      convert_to_transferwise_object(response)
     end
 
     def self.get(resource_id, headers = {})
-      response = TransferWise::Request.request(:get, resource_url(resource_id), {}, headers)
-      convert_to_transfer_wise_object(response)
+      response = Transferwise::Request.request(:get, resource_url(resource_id), {}, headers)
+      convert_to_transferwise_object(response)
     end
   end
 end

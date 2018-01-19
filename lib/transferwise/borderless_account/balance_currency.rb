@@ -1,4 +1,4 @@
-module TransferWise
+module Transferwise
   class BorderlessAccount::BalanceCurrency < APIResource
     def self.collection_url(resource_id = nil)
       "/#{API_VERSION}/borderless-accounts/balance-currencies"

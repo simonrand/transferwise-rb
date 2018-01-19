@@ -1,13 +1,13 @@
-# TransferWise
+# Transferwise
 
-Welcome to transfer_wise ruby gem! The transfer_wise Ruby gem provide a small SDK for convenient access to the TransferWise API from applications written in the Ruby language. It provides a pre-defined set of classes for API resources that initialize themselves dynamically from API responses which allows the bindings to tolerate a number of different versions of the API.
+Welcome to transferwise ruby gem! The transferwise Ruby gem provide a small SDK for convenient access to the Transferwise API from applications written in the Ruby language. It provides a pre-defined set of classes for API resources that initialize themselves dynamically from API responses which allows the bindings to tolerate a number of different versions of the API.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'transfer_wise'
+gem 'transferwise'
 ```
 
 And then execute:
@@ -16,25 +16,25 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install transfer_wise
+    $ gem install transferwise
 
 ## Usage
 
 The library needs to be configured with environment mode "test" or "live"
 ```ruby
 For live mode
-TransferWise.mode = "live"
+Transferwise.mode = "live"
 
 For test mode
-TransferWise.mode = "test"
+Transferwise.mode = "test"
 ```
 # Development
 ## Authentication
 
-TransferWise uses OAuth 2 for API authentication and authorization. Calls done in behalf of the user require the access token, other calls require Basic Auth. Please keep in mind that tokens are unique to user and should be stored securely.
+Transferwise uses OAuth 2 for API authentication and authorization. Calls done in behalf of the user require the access token, other calls require Basic Auth. Please keep in mind that tokens are unique to user and should be stored securely.
 
 ```ruby
-tw = TransferWise::OAuth.new(client_id, client_secret)
+tw = Transferwise::OAuth.new(client_id, client_secret)
 ```
 
 ```ruby
@@ -75,7 +75,7 @@ Response:
 =end
 ```
 
-# Anatomy of a TransferWise Transfer
+# Anatomy of a Transferwise Transfer
 To create the transfers, we need to get profile, quote and target account first.
 
 ## Profile
@@ -90,7 +90,7 @@ profile_request = {
       phoneNumber: "+918147001602"   # Sender number in international format
   }
 }
-profile = TransferWise::Profile.create(profile_request, {access_token: access_token})
+profile = Transferwise::Profile.create(profile_request, {access_token: access_token})
 ```
 ## Quote
 Create a quote
@@ -99,10 +99,11 @@ quote_request = {
   profile: profile.id,  # got from previous profile response
   source: "USD",        # source currency
   target: "INR",        # target currency
-  sourceAmount: "100",  # source amount is amount which sender is going to send. TransferWise will deduct their fees and receipient will receive less money.
-  rateType: "FIXED"
+  sourceAmount: "100",  # source amount is amount which sender is going to send. Transferwise will deduct their fees and receipient will receive less money.
+  rateType: "FIXED",
+  type: 'BALANCE_PAYOUT' # or 'BALANCE_CONVERSION' if using for conversion
 }
-quote = TransferWise::Quote.create(quote_request, {access_token: access_token})
+quote = Transferwise::Quote.create(quote_request, {access_token: access_token})
 ```
 ## Account
 
@@ -128,7 +129,7 @@ account_request = {
       }
   }
 }
-account = TransferWise::Account.create(account_request, {access_token: access_token})
+account = Transferwise::Account.create(account_request, {access_token: access_token})
 ```
 
 ## Transfer
@@ -143,14 +144,24 @@ transfer_request = {
     "reference" => "Any Comment" # get the field detail, from transfer requirements api before creating the transfer object.
   }
 }
-transfer = TransferWise::Transfer.create(transfer_request, {access_token: access_token})
+transfer = Transferwise::Transfer.create(transfer_request, {access_token: access_token})
 
 ```
 
-The Transfer object is created via the TransferWise website. You can go there and make payments to complete the transfer.
+The Transfer object is created via the Transferwise website. You can go there and make payments to complete the transfer.
 
-# TransferWise Borderless Account
-A Borderless Account is a "virtual" bank account that you can control via the TransferWise API, to send funds to external bank accounts (across borders), as well as download statements and view the current balance.
+Fund a transfer
+```ruby
+Transferwise::Transfer.fund(transfer_id, { access_token: access_token })
+```
+
+Cancel a transfer
+```ruby
+Transferwise::Transfer.cancel(transfer_id, { access_token: access_token })
+```
+
+# Transferwise Borderless Account
+A Borderless Account is a "virtual" bank account that you can control via the Transferwise API, to send funds to external bank accounts (across borders), as well as download statements and view the current balance.
 
 ## Borderless Accounts
 https://api-docs.transferwise.com/v1/borderless-account/search-account-by-user-profile
@@ -159,27 +170,38 @@ Get all the borderless accounts given a `profileId`
 
 ```ruby
 account_request = { profileId: 1234567 }
-account = TransferWise::BorderlessAccount.list(nil, { 'params' => account_request })
+account = Transferwise::BorderlessAccount.list(nil, { 'params' => account_request, access_token: access_token })
 ```
 
 ## Borderless Account
 https://api-docs.transferwise.com/v1/borderless-account/get-available-balances
 
-Get a borderless account given a `borderlessAccountId`
+Get a borderless account given a `borderless_account_id`
 
 ```ruby
-borderlessAccountId = 123
-account = TransferWise::BorderlessAccount.get(borderlessAccountId)
+borderless_account_id = 123
+account = Transferwise::BorderlessAccount.get(borderless_account_id, {access_token: access_token})
 ```
 
 ## Transactions
 https://api-docs.transferwise.com/v1/borderless-account/get-account-statement
 
-Get all the transactions for an account given a `borderlessAccountId`
+Get all the transactions for an account given a `borderless_account_id`
 
 ```ruby
-borderlessAccountId = 123
-transactions = TransferWise::BorderlessAccount::Transaction.list(nil, { 'params' => { page: '5' } }, resource_id: borderlessAccountId)
+borderless_account_id = 123
+transactions = Transferwise::BorderlessAccount::Transaction.list(nil, { 'params' => { page: '5' }, access_token: access_token }, borderless_account_id)
+```
+
+## Conversions
+https://api-docs.transferwise.com/v1/borderless-account/convert-between-currencies
+
+Move funds between your borderless account currencies.
+
+```ruby
+borderless_account_id = 123
+access_header = { access_token: access_token }
+transactions = Transferwise::BorderlessAccount.convert(borderless_account_id, conversion_quote_id, access_header)
 ```
 
 ## Statement
@@ -194,7 +216,7 @@ query_string = {
   startDate: '2017-12-01',
   endDate: '2017-12-07'
 }
-statement = TransferWise::BorderlessAccount::Statement.list(nil, { 'params' => query_string })
+statement = Transferwise::BorderlessAccount::Statement.list(nil, { 'params' => query_string })
 ```
 
 ## Currencies
@@ -203,5 +225,5 @@ https://api-docs.transferwise.com/v1/borderless-account/available-currencies
 Get a list of available currencies for your balances
 
 ```ruby
-TransferWise::BorderlessAccount::BalanceCurrency.list
+Transferwise::BorderlessAccount::BalanceCurrency.list
 ```

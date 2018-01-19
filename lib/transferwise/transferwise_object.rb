@@ -1,5 +1,5 @@
-module TransferWise
-  module TransferWiseObject
+module Transferwise
+  module TransferwiseObject
 
     def self.included(base)
       base.extend ClassMethods
@@ -30,10 +30,10 @@ module TransferWise
     end
 
     module ClassMethods
-      def convert_to_transfer_wise_object(resp)
+      def convert_to_transferwise_object(resp)
         case resp
         when Array
-          resp.map { |i| convert_to_transfer_wise_object(i) }
+          resp.map { |i| convert_to_transferwise_object(i) }
         when Hash
           self.new.initialize_from(resp)
         else

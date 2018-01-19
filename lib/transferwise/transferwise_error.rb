@@ -1,4 +1,4 @@
-module TransferWise
+module Transferwise
 
   STATUS_CLASS_MAPPING = {
     400 => "InvalidRequestError",
@@ -6,7 +6,7 @@ module TransferWise
     401 => "AuthenticationError"
   }
 
-  class TransferWiseError < StandardError
+  class TransferwiseError < StandardError
     attr_reader :message, :http_status, :http_body, :http_headers, :json_body
 
     def initialize(params = {})
@@ -21,19 +21,19 @@ module TransferWise
     end
   end
 
-  class APIConnectionError < TransferWiseError
+  class APIConnectionError < TransferwiseError
   end
 
-  class APIError < TransferWiseError
+  class APIError < TransferwiseError
   end
 
-  class AuthenticationError < TransferWiseError
+  class AuthenticationError < TransferwiseError
   end
 
-  class InvalidRequestError < TransferWiseError
+  class InvalidRequestError < TransferwiseError
   end
 
-  class ParseError < TransferWiseError
+  class ParseError < TransferwiseError
   end
 
 end

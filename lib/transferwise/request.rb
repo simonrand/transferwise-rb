@@ -1,12 +1,12 @@
-module TransferWise
+module Transferwise
   class Request
     def self.api_url(url = '')
-      TransferWise.api_base + url
+      Transferwise.api_base + url
     end
 
     def self.request(method, url, params={}, headers={})
       url = api_url(url)
-      access_token = headers.delete(:access_token) || TransferWise.access_token
+      access_token = headers.delete(:access_token) || Transferwise.access_token
       request_opts = {
         url: url,
         method: method,
@@ -58,11 +58,11 @@ module TransferWise
 
     def self.handle_api_error(resp)
       error_obj = parse(resp).with_indifferent_access
-      error_message = error_obj['error'].presence || error_obj['errors'].map{|e| e["message"]}.join(', ')
-      if TransferWise::STATUS_CLASS_MAPPING.include?(resp.code)
-        raise "TransferWise::#{TransferWise::STATUS_CLASS_MAPPING[resp.code]}".constantize.new(error_params(error_message, resp, error_obj))
+      error_message = error_obj['error'].presence || error_obj['errors']&.map{|e| e["message"]}&.join(', ') || error_obj.to_s
+      if Transferwise::STATUS_CLASS_MAPPING.include?(resp.code)
+        raise "Transferwise::#{Transferwise::STATUS_CLASS_MAPPING[resp.code]}".constantize.new(error_params(error_message, resp, error_obj))
       else
-        raise TransferWise::TransferWiseError.new(error_params(error_message, resp, error_obj))
+        raise Transferwise::TransferwiseError.new(error_params(error_message, resp, error_obj))
       end
     end
 
@@ -71,19 +71,19 @@ module TransferWise
 
       case e
       when RestClient::RequestTimeout
-        message = "Could not connect to TransferWise (#{request_opts[:url]}). #{connection_message}"
+        message = "Could not connect to Transferwise (#{request_opts[:url]}). #{connection_message}"
       when RestClient::ServerBrokeConnection
         message = "The connection to the server (#{request_opts[:url]}) broke before the " \
           "request completed. #{connection_message}"
       else
-        message = "Unexpected error communicating with TransferWise. "
+        message = "Unexpected error communicating with Transferwise. "
       end
 
-      raise TransferWise::APIConnectionError.new({message: "#{message} \n\n (Error: #{e.message})"})
+      raise Transferwise::APIConnectionError.new({message: "#{message} \n\n (Error: #{e.message})"})
     end
 
     def self.handle_parse_error(rcode, rbody)
-      TransferWise::ParseError.new({
+      Transferwise::ParseError.new({
         message: "Not able to parse because of invalid response object from API: #{rbody.inspect} (HTTP response code was #{rcode})",
         http_status: rcode,
         http_body: rbody
