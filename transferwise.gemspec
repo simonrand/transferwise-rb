@@ -6,8 +6,8 @@ require 'transferwise/version'
 Gem::Specification.new do |spec|
   spec.name          = "transferwise"
   spec.version       = Transferwise::VERSION
-  spec.authors       = ["Harshvardhan Parihar"]
-  spec.email         = ["harsh@milaap.org"]
+  spec.authors       = ["Harshvardhan Parihar", "Fernando Gorodscy"]
+  spec.email         = ["harsh@milaap.org", "fegorodscy@gmail.com"]
 
   spec.summary       = "Ruby gem for Transferwise Apis"
   spec.description   = "Ruby gem for Transferwise Apis"
