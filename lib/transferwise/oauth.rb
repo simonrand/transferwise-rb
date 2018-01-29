@@ -16,11 +16,21 @@ module Transferwise
         }
       )
     end
+    
+    def authorize_client
+      @authorize_client ||= ::OAuth2::Client.new(
+        @client_id,
+        @client_secret,
+        { site: Transferwise.authorization_base,
+          auth_scheme: :basic_auth
+        }
+      )
+    end
 
     # Get the url to redirect a user to, pass the redirect_url you want the user
     # to be redirected back to.
     def authorize_url(redirect_url)
-      client.auth_code.authorize_url({redirect_uri: redirect_url})
+      authorize_client.auth_code.authorize_url({redirect_uri: redirect_url})
     end
 
     # Get the access token. You must pass the exact same redirect_url passed

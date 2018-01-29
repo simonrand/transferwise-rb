@@ -38,5 +38,11 @@ module Transferwise
       test_url = 'https://api.sandbox.transferwise.tech'
       @api_base ||= mode == 'live' ? live_url : test_url
     end
+
+    def authorization_base
+      live_url = 'https://api.transferwise.com'
+      test_url = 'https://sandbox.transferwise.tech'
+      @authorization_base ||= mode == 'live' ? live_url : test_url
+    end
   end
 end
