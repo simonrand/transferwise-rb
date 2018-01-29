@@ -34,7 +34,9 @@ module Transferwise
     attr_accessor :access_token
 
     def api_base
-      @api_base ||= "https://#{mode == 'live' ? 'api' : 'test-api'}.transferwise.com"
+      live_url = 'api.transferwise.com'
+      test_url = 'sandbox.transferwise.tech'
+      @api_base ||= "https://#{mode == 'live' ? live_url : test_url}"
     end
   end
 end
