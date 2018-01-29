@@ -36,5 +36,9 @@ module TransferWise
     def api_base
       @api_base ||= mode == 'live' ? "https://api.transferwise.com" : "https://api.sandbox.transferwise.tech"
     end
+    
+    def authorization_base
+      @authorization_base ||= mode == 'live' ? "https://api.transferwise.com" : "https://sandbox.transferwise.tech"
+    end
   end
 end
