@@ -10,6 +10,11 @@ require "transferwise/version"
 # Oauth2 Authentication
 require "transferwise/oauth"
 
+# ActiveSupport extensions
+require 'active_support/core_ext/hash/indifferent_access'
+require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/string/inflections'
+
 # Resources
 require 'transferwise/transferwise_object'
 require 'transferwise/api_resource'

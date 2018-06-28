@@ -27,9 +27,11 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency('rest-client', '>= 1.4', '< 4.0')
-  spec.add_runtime_dependency("oauth2".freeze, ["< 2.0", ">= 1.4.0"])
+  spec.add_runtime_dependency "activesupport", ">= 3.0.0", "< 6.0"
+  spec.add_runtime_dependency "oauth2", ">= 1.4.0", "< 2.0"
+  spec.add_runtime_dependency "rest-client", ">= 1.4", "< 4.0"
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "webmock", "~> 3.0"
 end

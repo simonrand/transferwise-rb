@@ -10,14 +10,20 @@ module Transferwise
       request_opts = {
         url: url,
         method: method,
-        payload: params.to_json,
         headers: request_headers(access_token).update(headers)
       }
+
+      if method == :get
+        request_opts[:headers].update(params: params)
+      else
+        request_opts.update(payload: params.to_json)
+      end
+
       response = execute_request(request_opts)
       parse(response)
     end
 
-    private
+    # Private class methods
 
     def self.request_headers(access_token)
       {
@@ -25,6 +31,7 @@ module Transferwise
         'Content-Type' => 'application/json'
       }
     end
+    private_class_method :request_headers
 
     def self.execute_request(request_opts)
       begin
@@ -38,6 +45,7 @@ module Transferwise
       end
       response
     end
+    private_class_method :execute_request
 
     def self.parse(response)
       begin
@@ -47,6 +55,7 @@ module Transferwise
       end
       response
     end
+    private_class_method :parse
 
     def self.handle_error(e, request_opts)
       if e.is_a?(RestClient::ExceptionWithResponse) && e.response
@@ -55,6 +64,7 @@ module Transferwise
         handle_restclient_error(e, request_opts)
       end
     end
+    private_class_method :handle_error
 
     def self.handle_api_error(resp)
       error_obj = parse(resp).with_indifferent_access
@@ -65,6 +75,7 @@ module Transferwise
         raise Transferwise::TransferwiseError.new(error_params(error_message, resp, error_obj))
       end
     end
+    private_class_method :handle_api_error
 
     def self.handle_restclient_error(e, request_opts)
       connection_message = "Please check your internet connection and try again. "
@@ -81,6 +92,7 @@ module Transferwise
 
       raise Transferwise::APIConnectionError.new({message: "#{message} \n\n (Error: #{e.message})"})
     end
+    private_class_method :handle_restclient_error
 
     def self.handle_parse_error(rcode, rbody)
       Transferwise::ParseError.new({
@@ -89,6 +101,7 @@ module Transferwise
         http_body: rbody
       })
     end
+    private_class_method :handle_parse_error
 
     def self.error_params(error, resp, error_obj)
       {
@@ -99,5 +112,6 @@ module Transferwise
         http_headers: resp.headers
       }
     end
+    private_class_method :error_params
   end
 end
