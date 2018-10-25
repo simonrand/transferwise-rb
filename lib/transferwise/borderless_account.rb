@@ -1,7 +1,7 @@
 module Transferwise
   class BorderlessAccount < APIResource
     def self.collection_url(resource_id = nil)
-      "/#{API_VERSION}/borderless-accounts"
+      "#{API_VERSION}/borderless-accounts"
     end
 
     def self.convert(borderless_account_id, quote_id, headers)
