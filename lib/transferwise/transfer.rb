@@ -9,7 +9,6 @@ module Transferwise
     end
 
     def self.fund(transfer_id, headers)
-      API_VERSION = 'v3'
       url = "#{resource_url(transfer_id)}/payments"
 
       params = { 'type' => 'BALANCE' }

@@ -8,15 +8,15 @@ module Transferwise
       self.name.split('::')[-1]
     end
 
-    def self.resource_url(resource_id)
-      "#{collection_url}/#{resource_id}"
+    def self.resource_url(resource_id, api_version: API_VERSION)
+      "#{collection_url(api_version: api_version)}/#{resource_id}"
     end
 
-    def self.collection_url(resource_id = nil)
+    def self.collection_url(resource_id = nil, api_version: API_VERSION)
       if self == APIResource
         raise NotImplementedError.new('APIResource is an abstract class. You should perform actions on its subclasses (Account, Transfer, etc.)')
       end
-      "/#{API_VERSION}/#{CGI.escape(class_name.downcase)}s"
+      "/#{api_version}/#{CGI.escape(class_name.downcase)}s"
     end
 
     def self.create(params = {}, opts = {})
