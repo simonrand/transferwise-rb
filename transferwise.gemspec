@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'transferwise/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "transferwise"
+  spec.name          = "transferwise-rb"
   spec.version       = Transferwise::VERSION
   spec.authors       = ["Harshvardhan Parihar", "Fernando Gorodscy"]
   spec.email         = ["harsh@milaap.org", "fegorodscy@gmail.com"]
@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "activesupport", ">= 3.0.0", "< 7"
   spec.add_runtime_dependency "oauth2", ">= 1.4.0", "< 2.0"
   spec.add_runtime_dependency "rest-client", ">= 1.4", "< 4.0"
-  spec.add_development_dependency "bundler", "~> 1.11"
+  spec.add_development_dependency "bundler", "~> 2.2"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "webmock", "~> 3.0"
