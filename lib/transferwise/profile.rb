@@ -7,5 +7,12 @@ module Transferwise
       response = Request.request(:post, url, params, headers)
       convert_to_transferwise_object(response)
     end
+
+    def self.balances(profile_id)
+      url = "#{resource_url(profile_id, api_version: 'v4')}/balances"
+
+      response = Request.request(:get, url, { types: 'STANDARD' } , {})
+      convert_to_transferwise_object(response)
+    end
   end
 end
