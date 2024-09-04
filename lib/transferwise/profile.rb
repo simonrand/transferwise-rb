@@ -8,10 +8,10 @@ module Transferwise
       convert_to_transferwise_object(response)
     end
 
-    def self.balances(profile_id)
+    def self.balances(profile_id, headers)
       url = "#{resource_url(profile_id, api_version: 'v4')}/balances"
 
-      response = Request.request(:get, url, { types: 'STANDARD' } , {})
+      response = Request.request(:get, url, { types: 'STANDARD' } , headers)
       convert_to_transferwise_object(response)
     end
   end
